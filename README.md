@@ -8,26 +8,33 @@ prerequisites: [bun](https://bun.sh)
 # install dependencies
 bun install
 
-# run program
-bun start
+# run program (inputs in file.txt)
+bun start file.txt
+
+# compile into an executable at /dist/rnkstuff
+bun build
+
+# run executable at /dist/rnkstuff
+bun preview file.txt
 ```
 
 ## TODOs
 
 roadmap
-- have a basic tournament sort done in CLI (at least fit my own use case first lol)
-- abstract the algo such that we can choose sorting algorithms
-- abstract the logic such that we can use the same algos on a website
-- think about how to implement leaderboard
-- buy domain rnkstuff.com and host it
-- uhhhh "tell the world about it?"
+- [x] have a basic sort done in CLI (at least fit my own use case first lol)
+- [ ] abstract the algo such that we can choose sorting algorithms
+- [ ] abstract the logic such that we can use the same algos on a website
+- [ ] think about how to implement leaderboard
+- [ ] buy domain rnkstuff.com and host it
+- [ ] CLI dev workflow
+- [ ] uhhhh "tell the world about it?"
 
 other things to do
-- see other "code submission" websites and competitions and see how they implement it, learn from them
+- [ ] see other "code submission" websites and competitions and see how they implement it, learn from them
 
 random stuff
-- `curl -fsSL rnkstuff.com/run.sh | bash` for running it...? or probably should be `run.ts | bun` instead....????? or `run.sh` downloads a `bun` binary to run it LMAO
-- what if we allow different programming languages too other than JS/TS? like Python? or even Lua? how do we run these programs on the web? WASM interpreters? what about the others like C/C++/C#/Java/Go/Rust and more? maybe an easy way for people to contribute their own...?
+- [ ] `curl -fsSL rnkstuff.com/run.sh | bash` for running it...? or probably should be `run.ts | bun` instead....????? or `run.sh` downloads a `bun` binary to run it LMAO
+- [ ] what if we allow different programming languages too other than JS/TS? like Python? or even Lua? how do we run these programs on the web? WASM interpreters? what about the others like C/C++/C#/Java/Go/Rust and more? maybe an easy way for people to contribute their own...?
 
 ## scratch pad
 

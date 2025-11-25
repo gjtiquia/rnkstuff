@@ -45,7 +45,7 @@ but in here, we "lock down" the "environment". users submit a list of stuff they
 
 since we are so focused on being pragmatic here, we also need to consider the case where... some items are... inherently cyclic in nature. i love bulbasaur more than charmander, i love charmander more than squirtle, but i can also love squirtle more than bulbasaur (heck no bulba is the best but this is just for demonstration purposes, sorry bulba)
 
-so... that would definitely put tournament sort at the "bottom", but only if there exists a "cyclic ranking" in the list... and does "cyclic ranking" actually often exists in the "real world"?
+so... that would definitely "break" most "optimized" sorting algorithms... cuz we can only "detect cyclic ranking" by doing an O(n^2) check... but only if there exists a "cyclic ranking" in the list... and does "cyclic ranking" actually often exists in the "real world"?
 
 anyways, build it first hahahahaha
 

@@ -2,6 +2,8 @@
 
 ## commands
 
+prerequisites: [bun]("https://bun.sh")
+
 ```bash
 # install dependencies
 bun install

@@ -21,7 +21,9 @@ bun preview file.txt
 ## TODOs
 
 roadmap
-- [x] have a basic sort done in CLI (at least fit my own use case first lol)
+- [ ] have a basic sort done in CLI (at least fit my own use case first lol)
+    - [x] basic sort algo
+    - [ ] should save output to a file
 - [ ] abstract the algo such that we can choose sorting algorithms
 - [ ] abstract the logic such that we can use the same algos on a website
 - [ ] think about how to implement leaderboard

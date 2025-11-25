@@ -1,38 +1,64 @@
+import { resolve } from "path";
 
-main();
+await main();
 
-async function main(): Promise<Status> {
+async function main() {
     console.log("rnkstuff")
 
-    // const stdinSize = Bun.stdin.size
-    // console.log(stdinSize)
-    // if (isNaN(stdinSize) || !isFinite(stdinSize)) { // no input gives infinite stdin.size
-    //     console.error("no input file detected! try doing something like `cat file.txt | bun start")
-    //     return "ERROR";
-    // }
-
-    const inputFile = await Bun.stdin.text()
-
-    console.log(inputFile)
-
-    const stuffToRank = inputFile.split("\n")
-    if (stuffToRank.length <= 0) {
-        console.error("no input file detected! try doing something like `cat file.txt | bun start")
-        return "ERROR";
+    const relativeFilePath = Bun.argv[2]
+    if (!relativeFilePath) {
+        console.error("no input file! try something like `bun start file.txt`")
+        return;
     }
 
-    console.log(stuffToRank)
+    const absoluteFilePath = resolve(relativeFilePath);
+    const file = Bun.file(absoluteFilePath);
+    const text = await file.text();
+    const stuffToRank = text.split("\n").filter(x => x.length > 0)
 
-    const firstName = prompt("what is your name?")
+    console.log("stuff to rank:", stuffToRank)
 
-    console.log(`your name is ${firstName}`)
+    const rankContext: RankContext = new CLIRankUtil(stuffToRank);
+    const rankFunctionAsync: RankFunctionAsync = rankAsync;
 
-    const result = confirm("are you sure?")
+    const rankedStuff = await rankFunctionAsync(rankContext);
 
-    console.log(result)
-
-    alert("yoooo this is an alert")
-    return "OK"
+    console.log("result:", rankedStuff);
 }
 
-type Status = "OK" | "ERROR"
+type RankFunctionAsync = (c: RankContext) => Promise<RankOutput>
+
+type RankContext = {
+    input: string[],
+    promptAsync: (promptText: string) => Promise<string>,
+}
+
+type RankOutput = string[];
+
+class CLIRankUtil implements RankContext {
+    public input: string[];
+
+    constructor(input: string[]) {
+        this.input = input;
+    }
+
+    public async promptAsync(promptText: string): Promise<string> {
+        const response = globalThis.prompt(promptText);
+        if (!response)
+            return "";
+
+        return response;
+    }
+
+}
+
+// ---------------------
+
+async function rankAsync(c: RankContext): Promise<RankOutput> {
+    const response = await c.promptAsync("what do you think about flowers");
+    return response.split(" ");
+}
+
+
+
+

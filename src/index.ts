@@ -3,14 +3,17 @@ import { resolve } from "path";
 await main();
 
 async function main() {
+
     console.log("rnkstuff")
 
+    // validate user input
     const relativeFilePath = Bun.argv[2]
     if (!relativeFilePath) {
         console.error("no input file! try something like `bun start file.txt`")
         return;
     }
 
+    // get stuffToRank
     const absoluteFilePath = resolve(relativeFilePath);
     const file = Bun.file(absoluteFilePath);
     const text = await file.text();
@@ -18,6 +21,7 @@ async function main() {
 
     console.log("stuff to rank:", stuffToRank)
 
+    // setup rank context and rank function
     const rankContext: RankContext = {
         input: stuffToRank,
         promptAsync: async (promptText: string) => {
@@ -33,6 +37,21 @@ async function main() {
     const rankedStuff = await rankFunctionAsync(rankContext);
 
     console.log("result:", rankedStuff);
+
+    if (rankedStuff.length !== stuffToRank.length) {
+        console.error(`rankedStuff.length (${rankedStuff.length}) is different from stuffToRank.length (${stuffToRank.length})!`)
+        return;
+    }
+
+    for (const stuff of rankedStuff) {
+        if (!stuffToRank.includes(stuff))
+            console.error(`stuffToRank does not include "${stuff}" from rankedStuff!`);
+    }
+
+    for (const stuff of stuffToRank) {
+        if (!rankedStuff.includes(stuff))
+            console.error(`rankedStuff does not include "${stuff}" from stuffToRank!`);
+    }
 }
 
 type RankFunctionAsync = (c: RankContext) => Promise<RankOutput>
@@ -47,8 +66,7 @@ type RankOutput = string[];
 // ---------------------
 
 async function rankAsync(c: RankContext): Promise<RankOutput> {
-    const response = await c.promptAsync("what do you think about flowers");
-    return response.split(" ");
+    return c.input
 }
 
 

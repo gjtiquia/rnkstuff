@@ -18,7 +18,16 @@ async function main() {
 
     console.log("stuff to rank:", stuffToRank)
 
-    const rankContext: RankContext = new CLIRankUtil(stuffToRank);
+    const rankContext: RankContext = {
+        input: stuffToRank,
+        promptAsync: async (promptText: string) => {
+            const response = globalThis.prompt(promptText);
+            if (!response)
+                return "";
+            return response;
+        },
+    }
+
     const rankFunctionAsync: RankFunctionAsync = rankAsync;
 
     const rankedStuff = await rankFunctionAsync(rankContext);
@@ -34,23 +43,6 @@ type RankContext = {
 }
 
 type RankOutput = string[];
-
-class CLIRankUtil implements RankContext {
-    public input: string[];
-
-    constructor(input: string[]) {
-        this.input = input;
-    }
-
-    public async promptAsync(promptText: string): Promise<string> {
-        const response = globalThis.prompt(promptText);
-        if (!response)
-            return "";
-
-        return response;
-    }
-
-}
 
 // ---------------------
 

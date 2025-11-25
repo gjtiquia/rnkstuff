@@ -23,7 +23,7 @@ async function main() {
 
     // setup rank context and rank function
     const rankContext: RankContext = {
-        input: stuffToRank,
+        input: [...stuffToRank],
         promptAsync: async (promptText: string) => {
             const response = globalThis.prompt(promptText);
             if (!response)
@@ -32,7 +32,7 @@ async function main() {
         },
     }
 
-    const rankFunctionAsync: RankFunctionAsync = rankAsync;
+    const rankFunctionAsync: RankFunctionAsync = nativeRankAsync;
 
     const rankedStuff = await rankFunctionAsync(rankContext);
 
@@ -65,8 +65,34 @@ type RankOutput = string[];
 
 // ---------------------
 
-async function rankAsync(c: RankContext): Promise<RankOutput> {
-    return c.input
+async function nativeRankAsync(c: RankContext): Promise<RankOutput> {
+
+    const sorted = c.input.toSorted((a, b) => {
+
+        // TODO : haha this is techinally cheating, 
+        // TODO : 1) not my own sort function, 2) not using await c.promptAsync
+        // TODO : can fix 2) by storing a queue of requests and then asking them one by one, then storing the answers and passing it back to the native sort
+        const input = globalThis.prompt(`
+question:
+(1) ${a}
+(2) ${b}
+do you like (1) or (2) more?
+`)
+
+        switch (input) {
+            case "1":
+            case "(1)":
+                return -1;
+
+            case "2":
+            case "(2)":
+                return 1;
+        }
+
+        return 0;
+    })
+
+    return sorted
 }
 
 

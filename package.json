@@ -1,6 +1,8 @@
 {
     "scripts": {
-        "start": "bun run src/index.ts"
+        "start": "bun run src/index.ts",
+        "build": "bun build src/index.ts --outfile dist/rnkstuff --compile",
+        "preview": "./dist/rnkstuff"
     },
     "devDependencies": {
         "@types/bun": "latest"

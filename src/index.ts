@@ -9,7 +9,7 @@ async function main() {
     // validate user input
     const relativeFilePath = Bun.argv[2]
     if (!relativeFilePath) {
-        console.error("no input file! try something like `bun start file.txt`")
+        console.error("no input file!")
         return;
     }
 
@@ -17,11 +17,11 @@ async function main() {
     const absoluteFilePath = resolve(relativeFilePath);
     const file = Bun.file(absoluteFilePath);
     const text = await file.text();
-    const stuffToRank = text.split("\n").filter(x => x.length > 0)
+    const stuffToRank = text.split("\n").filter(x => x.length > 0).map(x => x.trim())
 
     console.log("stuff to rank:", stuffToRank)
 
-    // setup rank context and rank function
+    // setup rank context 
     const rankContext: RankContext = {
         input: [...stuffToRank],
         promptAsync: async (promptText: string) => {
@@ -32,12 +32,15 @@ async function main() {
         },
     }
 
+    // setup rank function
     const rankFunctionAsync: RankFunctionAsync = nativeRankAsync;
 
+    // run rank function
     const rankedStuff = await rankFunctionAsync(rankContext);
 
     console.log("result:", rankedStuff);
 
+    // validate result
     if (rankedStuff.length !== stuffToRank.length) {
         console.error(`rankedStuff.length (${rankedStuff.length}) is different from stuffToRank.length (${stuffToRank.length})!`)
         return;
@@ -77,6 +80,7 @@ question:
 (1) ${a}
 (2) ${b}
 do you like (1) or (2) more?
+
 `)
 
         switch (input) {
